@@ -30,7 +30,6 @@ export default function App(): JSX.Element {
 
   async function fetchPoints() {
     await getPoints(`points`).then((res) => {
-      console.log(`points found: `, res);
       if (res) {
         setPoints(parseInt(res));
       }
