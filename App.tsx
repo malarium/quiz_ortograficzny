@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
+  Button,
   Dimensions,
   ImageBackground,
   StyleSheet,
@@ -9,16 +10,32 @@ import {
 } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
 import * as Font from "expo-font";
+import { getPoints, savePoints } from "./helpers/storage";
 
 export default function App(): JSX.Element {
-  const windowWidth = Dimensions.get("screen").width;
-  const windowHeight = Dimensions.get("screen").height;
-  const [fontsLoaded, setFontsLoaded] = React.useState(false);
+  const windowWidth: number = Dimensions.get("screen").width;
+  const windowHeight: number = Dimensions.get("screen").height;
+  const [fontsLoaded, setFontsLoaded] = React.useState<boolean>(false);
+  const [points, setPoints] = React.useState<number>(0);
 
   React.useEffect(() => {
     lockLandscapeOrientation();
     loadFonts();
+    fetchPoints();
   }, []);
+
+  React.useEffect(() => {
+    savePoints(`points`, points.toString());
+  }, [points]);
+
+  async function fetchPoints() {
+    await getPoints(`points`).then((res) => {
+      console.log(`points found: `, res);
+      if (res) {
+        setPoints(parseInt(res));
+      }
+    });
+  }
 
   async function lockLandscapeOrientation() {
     await ScreenOrientation.lockAsync(
@@ -50,6 +67,8 @@ export default function App(): JSX.Element {
           <Text style={{ fontFamily: "Cookie", fontSize: 50 }}>
             ORTO QUIZ (Cookie font)
           </Text>
+          <Text style={{ fontFamily: "Cookie", fontSize: 50 }}>{points}</Text>
+          <Button title={`press`} onPress={() => setPoints(points + 1)} />
           <StatusBar style="auto" />
         </ImageBackground>
       </View>
