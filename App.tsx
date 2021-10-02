@@ -1,22 +1,26 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import {
-  Button,
-  Dimensions,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { BackHandler, Dimensions, Text } from "react-native";
 import * as ScreenOrientation from "expo-screen-orientation";
 import * as Font from "expo-font";
 import { getPoints, savePoints } from "./helpers/storage";
+import { mainGameContext } from "./contexts/mainGameContext";
+import { MainScreen } from "./components/MainScreen";
+import { Game } from "./components/Game";
+import { Scores } from "./components/Scores";
+
+export enum Screens {
+  MainScreen,
+  Game,
+  Scores,
+}
 
 export default function App(): JSX.Element {
   const windowWidth: number = Dimensions.get("screen").width;
   const windowHeight: number = Dimensions.get("screen").height;
   const [fontsLoaded, setFontsLoaded] = React.useState<boolean>(false);
   const [points, setPoints] = React.useState<number>(0);
+  const [screen, setScreen] = React.useState<number>(Screens.MainScreen);
 
   React.useEffect(() => {
     lockLandscapeOrientation();
@@ -50,40 +54,33 @@ export default function App(): JSX.Element {
     setFontsLoaded(true);
   }
 
+  const initExit = () => {
+    BackHandler.exitApp();
+  };
+
   if (!fontsLoaded) {
     return <Text>Ładowanie...</Text>;
   } else {
     return (
-      <View style={styles.container}>
-        <ImageBackground
-          source={require(`./assets/background.jpg`)}
-          resizeMode="cover"
-          style={[styles.image, { width: windowWidth, height: windowHeight }]}
-        >
-          <Text style={{ fontFamily: "SpicyRice", fontSize: 50 }}>
-            ORTO QUIZ (SpicyRice font)
-          </Text>
-          <Text style={{ fontFamily: "Cookie", fontSize: 50 }}>
-            ORTO QUIZ (Cookie font)
-          </Text>
-          <Text style={{ fontFamily: "Cookie", fontSize: 50 }}>{points}</Text>
-          <Button title={`press`} onPress={() => setPoints(points + 1)} />
-          <StatusBar style="auto" />
-        </ImageBackground>
-      </View>
+      <mainGameContext.Provider
+        value={{
+          screen,
+          setScreen,
+          points,
+          setPoints,
+          initExit,
+          windowHeight,
+          windowWidth,
+        }}
+      >
+        {screen === Screens.MainScreen ? (
+          <MainScreen />
+        ) : screen === Screens.Game ? (
+          <Game />
+        ) : screen === Screens.Scores ? (
+          <Scores />
+        ) : null}
+      </mainGameContext.Provider>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "red",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  image: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
