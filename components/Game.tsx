@@ -8,7 +8,7 @@ export function Game(): JSX.Element {
   const { setScreen } = React.useContext(mainGameContext) as IGameProvider;
   return (
     <View>
-      <Text>Game</Text>
+      <Text style={{ fontFamily: "Cookie", fontSize: 50 }}>Game</Text>
       <Button
         title={`Main Screen`}
         onPress={() => setScreen(Screens.MainScreen)}

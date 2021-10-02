@@ -29,11 +29,11 @@ export default function App(): JSX.Element {
   }, []);
 
   React.useEffect(() => {
-    savePoints(`points`, points.toString());
+    savePoints(`player1`, points.toString());
   }, [points]);
 
   async function fetchPoints() {
-    await getPoints(`points`).then((res) => {
+    await getPoints(`player1`).then((res) => {
       if (res) {
         setPoints(parseInt(res));
       }
