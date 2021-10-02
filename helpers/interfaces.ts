@@ -8,3 +8,11 @@ export interface IGameProvider {
   windowHeight: number;
   setScreen: (screen: Screens) => void;
 }
+
+export interface IQuizWord {
+  word: string;
+  options: {
+    choice: string;
+    correct: boolean;
+  };
+}
