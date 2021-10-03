@@ -18,9 +18,7 @@ export function Game(): JSX.Element {
   }, []);
 
   React.useEffect(() => {
-    shuffledQuizWords
-      .slice(0, numberOfWordsPerOneGame)
-      .forEach((w) => console.log(w.word));
+    shuffledQuizWords.slice(0, numberOfWordsPerOneGame);
   }, [shuffledQuizWords]);
 
   const getRandomWordsForQuiz = () => {
@@ -36,8 +34,8 @@ export function Game(): JSX.Element {
         title={`Main Screen`}
         onPress={() => setScreen(Screens.MainScreen)}
       ></Button>
-      {shuffledQuizWords.map((wordObject) => (
-        <Text>{wordObject.word}</Text>
+      {shuffledQuizWords.map((wordObject, i) => (
+        <Text key={i}>{wordObject.word}</Text>
       ))}
     </View>
   );

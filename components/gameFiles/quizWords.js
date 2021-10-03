@@ -69,4 +69,18 @@ export const quizWords = [
       { choice: `ch`, correct: true },
     ],
   },
+  {
+    word: `ry_ka`,
+    options: [
+      { choice: `b`, correct: true },
+      { choice: `p`, corrent: false },
+    ],
+  },
+  {
+    word: `ró_dżka`,
+    options: [
+      { choice: `rz`, corrent: false },
+      { choice: `ż`, correct: true },
+    ],
+  },
 ];
